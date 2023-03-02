@@ -1,0 +1,22 @@
+{
+  "name": "repos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josepabellana/jwt-hive-integrationT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josepabellana/jwt-hive-integrationT/issues"
+  },
+  "homepage": "https://github.com/josepabellana/jwt-hive-integrationT#readme",
+  "dependencies": {
+    "@hivestreaming/hive-jwt-auth": "^1.1.0"
+  }
+}
