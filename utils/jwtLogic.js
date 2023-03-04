@@ -1,10 +1,10 @@
-import {
+const {
   HiveKeyPair,
   HiveJwtCreator,
   HivePublicKeyServiceClient,
-} from "@hivestreaming/hive-jwt-auth";
+} = require("@hivestreaming/hive-jwt-auth");
 
-export async function computePublicKey(data) {
+async function computePublicKey(data) {
   const file = "path/private-key.pem"; // File to save PEM-encoded private key
   const keyPair = await HiveKeyPair.create();
   await keyPair.writePrivateKey(file);
@@ -70,3 +70,6 @@ export async function computePublicKey(data) {
       player.load(session.manifest);
     });
 }
+
+
+exports.computePublicKey = computePublicKey;

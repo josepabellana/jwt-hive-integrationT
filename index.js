@@ -1,6 +1,6 @@
-import Express from 'express';
+const Express = require('express');
 const app = Express();
-import {computePublicKey} from './utils/jwtLogic.js';
+const {computePublicKey} = require('./utils/jwtLogic.js');
 
 app.get('/jwtHive', async function(req,res){
     res.send(await computePublicKey(req.body));
