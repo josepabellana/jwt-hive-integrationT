@@ -1,7 +1,10 @@
-const Express = require('express');
+import Express from 'express';
 const app = Express();
+import {computePublicKey} from './utils/jwtLogic.js';
 
-
+app.get('/jwtHive', async function(req,res){
+    res.send(await computePublicKey(req.body));
+});
 
 app.listen(3001,function (){
     try{
@@ -9,4 +12,4 @@ app.listen(3001,function (){
     }catch(err){
         console.log(err);
     }
-})
+});
