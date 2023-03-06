@@ -33,9 +33,9 @@ async function computePublicKey(data) {
   console.log(jwt);
 
   //PUBLISH PUBLIC KEY
-  const partnerToken = "foobar"; // Partner Token
+  const partnerToken = "a758gehgj2hgdw78yd87g321jaa"; // Partner Token
   const endpoint = "test"; // Endpoint: 'test' or 'prod'. Default if none provided: 'prod'
-  const expiration = 30; // Expiration. See documentation of `HivePublicKeyServiceClient#create` for format details.
+  const expiration = 1678104909; // Expiration. See documentation of `HivePublicKeyServiceClient#create` for format details.
 
   const publicKey = keyPair.exportPublicKey();
 
@@ -45,7 +45,7 @@ async function computePublicKey(data) {
     endpoint
   );
 
-  console.log(client)
+  console.log(client);
 
   await client.create({
     partnerId,

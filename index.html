@@ -29,27 +29,17 @@
             id="my-player"
             class="video-js"
             controls
-            preload="auto"
-            poster="//vjs.zencdn.net/v/oceans.png"
-            data-setup='{}'>
-        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
-        <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
-        <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source>
-        <p class="vjs-no-js">
-            To view this video please enable JavaScript, and consider upgrading to a
-            web browser that
-            <a href="https://videojs.com/html5-video-support/" target="_blank">
-            supports HTML5 video
-            </a>
-        </p>
+            >
         </video>
     </div>
     <script src="http://vjs.zencdn.net/4.5/video.js"></script>
     <script>
         (async function plugin(){
         let jwt = await fetch("http://localhost:3001/jwtHive");
-        // Define Hive plugin options. E.g. for video.js:
         console.log(jwt);
+
+
+        // Define Hive plugin options. E.g. for video.js:
         let hivePluginOptions = {
           debugLevel: "debug",
           hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
@@ -68,7 +58,7 @@
           },
         };
         let player = videojs('my-player', videojsOptions, () => {
-          videojs.log("player is ready");
+          console.log("player is ready");
         });
 
         // Instantiate plugin
@@ -78,7 +68,7 @@
         plugin
           .initSession({
             jwt: jwt,
-            videoId: "test-video",
+            videoId: "video-id",
             manifest:
               "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8",
           })
@@ -92,6 +82,7 @@
                 type: "application/x-mpegURL",
               },
             ]);
+            console.log('plugin working!');
           })
           .catch(function (error) {
             console.log("Error resolving Hive ticket", error);
