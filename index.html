@@ -1,56 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <style>
-        body{
-            height:100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
     </style>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Title</title>
-    <link href="//amp.azure.net/libs/amp/latest/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
-    <script type="text/javascript" src="//amp.azure.net/libs/amp/2.1.9/azuremediaplayer.min.js"></script>
-    <script  type="text/javascript"  src="./validation.js" ></script>
-    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script>
-   
-</head>
-<body>
-<h1>Josep's TownHall</h1>
-<div>
-    <video playsInline />
-</div>
-<script>
-    var myPlayer = amp('vid1', {
-                /* Options */
-                "nativeControlsForTouch": false,
-                autoplay: true,
-                controls: true,
-                width: "640",
-                height: "400",
-                techOrder: ['AzureHtml5JS'],
-                plugins: {
-                    /* load our telemetry plugin */
-                    jwt: {
-                        debugLevel: "debug",
-                        hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
-                        playerName: '',
-                        playerVersion: ''  
-                    }
-                }
-            }, function () {
-                console.log('Good to go!');
-            }
-    );
-    myPlayer.src([{
-        src: "https://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest(format=mpd-time-csf)",
-        type: "application/dash+xml"
-    }]);
     
-</script>
+    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js" />
+    <script src="https://download.hivestreaming.com/media-player/common_libs/html5/js/videojs/hive-videojs-xhr-interceptor.js" />
+    
+    <link href="http://vjs.zencdn.net/4.5/video-js.css" rel="stylesheet">
+    
 
-</body>
+
+    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script>
+  </head>
+  <body>
+    <h1>Josep's TownHall</h1>
+    <div>
+        <video
+            id="my-player"
+            class="video-js"
+            controls
+            preload="auto"
+            poster="//vjs.zencdn.net/v/oceans.png"
+            data-setup='{}'>
+        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+        <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm"></source>
+        <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg"></source>
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">
+            supports HTML5 video
+            </a>
+        </p>
+        </video>
+    </div>
+    <script src="http://vjs.zencdn.net/4.5/video.js"></script>
+    <script>
+        (async function plugin(){
+        let jwt = await fetch("http://localhost:3001/jwtHive");
+        // Define Hive plugin options. E.g. for video.js:
+        console.log(jwt);
+        let hivePluginOptions = {
+          debugLevel: "debug",
+          hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
+          playerName: "video.js",
+          playerVersion: videojs.VERSION,
+        };
+
+        // Create player instance. E.g. for video.js:
+        let videojsOptions = {
+          autoplay: true,
+          muted: true,
+          html5: {
+            hlsjsConfig: {
+              debug: false,
+            },
+          },
+        };
+        let player = videojs('my-player', videojsOptions, () => {
+          videojs.log("player is ready");
+        });
+
+        // Instantiate plugin
+        let plugin = new HiveHtml5(videoElement, hivePluginOptions);
+
+        // Initialize the session
+        plugin
+          .initSession({
+            jwt: jwt,
+            videoId: "test-video",
+            manifest:
+              "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8",
+          })
+          .then((session) => {
+            // Enable hive interceptor. E.g. for video.js:
+            enableHiveXhr(plugin, videojs);
+
+            player.src([
+              {
+                src: session.manifest,
+                type: "application/x-mpegURL",
+              },
+            ]);
+          })
+          .catch(function (error) {
+            console.log("Error resolving Hive ticket", error);
+          });
+      })();
+    </script>
+  </body>
 </html>
