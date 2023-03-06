@@ -1,8 +1,11 @@
 const Express = require('express');
 const app = Express();
 const {computePublicKey} = require('./utils/jwtLogic.js');
+const jwt = require('./utils/jwt');
 
+const jwtInstance = new jwt('9001', 'a758gehgj2hgdw78yd87g321jaa', 'prod');
 app.get('/jwtHive', async function(req,res){
+    console.log(jwtInstance)
     try{
         res.status(200).send(await computePublicKey(req.body));
     }catch(err){
