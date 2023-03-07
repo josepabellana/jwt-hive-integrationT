@@ -16,6 +16,8 @@ module.exports = class Jwt {
     this.videoId = "video-id";
     this.manifests = JSON.parse(process.env.MANIFESTS);
     this.expiresIn = 1000 * 60 * 30;  // 30 m
+    this.currentJWT = '';
+    this.expirationJWT = 0;
     this.eventName = "event test name";
     this.client = new HivePublicKeyServiceClient(
         this.partnerId,
@@ -63,16 +65,16 @@ module.exports = class Jwt {
 
   async createJWT() {
     //CREATE JWT
-    const jwt = HiveJwtCreator.create(this.partnerId, this.file).then(prom => prom.sign(
-        this.keyId,
-        this.customerId,
-        this.videoId,
-        this.manifests,
-        this.expiresIn,
-        this.eventName
-    ));
-    this.currentJWT = jwt;
+    this.currentJWT = HiveJwtCreator.create(this.partnerId, this.file).then(data => data.sign(this.keyId, this.customerId, this.videoId, this.manifests, this.expiresIn,this.eventName));
     this.expirationJWT = Date.now() + this.expiresIn;
-    return jwt;
+    return this.currentJWT;
+  }
+  checkJwtUTD(){
+    if(Date.now() < this.expirationJWT) return true;
+    else return false;
+  }
+
+  async getJwt(){
+    return this.currentJWT;
   }
 }

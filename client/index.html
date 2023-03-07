@@ -61,11 +61,11 @@
         body: JSON.stringify({videoId, manifest})
       })
         .then((response) => response.json())
-        .then((jwt) => {
-          console.log(jwt.newJwt);
+        .then(({jwt}) => {
+          console.log(jwt);
           plugin
             .initSession({
-              jwt:jwt.newJwt,
+              jwt:jwt,
               videoId,
               manifest,
             })
