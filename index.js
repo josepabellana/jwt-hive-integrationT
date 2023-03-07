@@ -12,14 +12,14 @@ const {computePublicKey} = require('./utils/jwtLogic.js');
 const Jwt = require('./utils/jwt');
 
 const jwtInstance = new Jwt(process.env.PARTNER_ID, process.env.PARTNER_TOKEN, process.env.ENVIRONMENT);
+jwtInstance.init();
 
-
-app.get('/jwtHive', async function(req,res){
-
-    console.log(jwtInstance)
+app.post('/jwtHive', async function(req,res){
+    const {manifest, videoId} = req.body;
     try{
-        await jwtInstance.init();
-        let newJwt = await computePublicKey(jwtInstance)
+        jwtInstance.updateInfo(manifest,videoId);
+        let newJwt = await computePublicKey(jwtInstance);
+        console.log('New jwt created: ',newJwt.slice(20))
         res.status(200).send({newJwt});
     }catch(err){
         res.send(`Internal Server Error: ${err}`)

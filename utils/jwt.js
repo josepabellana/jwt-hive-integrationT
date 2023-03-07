@@ -13,11 +13,10 @@ module.exports = class Jwt {
     this.file = process.env.FILE_PATH;
     this.keyId = "key-" + Math.floor(Math.random() * 1000);
     this.customerId = process.env.CUSTOMER_ID;
-    this.videoID = "video-id";
-    this.manifests = process.env.MANIFESTS;
-    this.expiresIn = "2m";
+    this.videoId = "video-id";
+    this.manifests = JSON.parse(process.env.MANIFESTS);
+    this.expiresIn = 1000 * 60 * 30;  // 30 m
     this.eventName = "event test name";
-
     this.client = new HivePublicKeyServiceClient(
         this.partnerId,
         this.partnerToken,
@@ -31,7 +30,10 @@ module.exports = class Jwt {
     const keyPair = await HiveKeyPair.create();
     await keyPair.writePrivateKey(this.file);
   }
-
+  updateInfo(manifest, videoId){
+    this.manifests = [manifest];
+    this.videoId = videoId;
+  }
   async publishPublicKey() {
     try{
         //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
