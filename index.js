@@ -14,14 +14,13 @@ const jwtInstance = new Jwt(process.env.PARTNER_ID, process.env.PARTNER_TOKEN, p
 
 
 app.post('/jwtHive', async function(req,res){
-    console.log('req:',req.body)
     let {videoId, manifest} = req.body;
-    console.log(videoId,manifest)
     try{
         res.status(200).send(await computePublicKey(jwtInstance));
     }catch(err){
         res.status(500).send(`Internal Server Error: ${err}`)
     }
+    res.end();
 });
 
 app.listen(3000,function (){

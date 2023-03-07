@@ -31,6 +31,7 @@
       let manifest = "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8";
       const jwt = fetch("http://localhost:3000/jwtHive", {
         method: "POST",
+        mode: "cors",
       })
       .then(value => value)
       .catch(error => console.log(error));
@@ -54,11 +55,12 @@
         },
       };
 
-      let player = videojs("my-player", videojsOptions, () => {
+      let videoEl = document.getElementById('my-player');
+      let player = videojs(videoEl, videojsOptions, () => {
         console.log("player is ready");
 
       });
-      let plugin = new HiveHtml5("my-player", hivePluginOptions);
+      let plugin = new HiveHtml5(videoEl, hivePluginOptions);
 
       // Initialize the session
       plugin

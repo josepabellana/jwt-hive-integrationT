@@ -3,7 +3,6 @@ async function computePublicKey(jwtInstance) {
   
 
     //publish Public Key
-    console.log(jwtInstance);
     
     let res = await jwtInstance.publishPublicKey();
     console.log(res);

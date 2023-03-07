@@ -36,13 +36,13 @@ module.exports = class Jwt {
         //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
         try{
             let a = await this.client.get(this.keyId);
-            console.log(a);
+            
             if(Date.now() < a.expiration){
                 return true;
             }
         }catch(err){
             this.keyId = "key-" + Math.floor(Math.random() * 1000);
-            console.log(this.keyId)
+            
             const keyPair = await HiveKeyPair.readFromFile(this.file);
             const publicKey = keyPair.exportPublicKey();
 
