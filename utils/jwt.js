@@ -71,6 +71,8 @@ module.exports = class Jwt {
         this.expiresIn,
         this.eventName
     ));
+    this.currentJWT = jwt;
+    this.expirationJWT = Date.now() + this.expiresIn;
     return jwt;
   }
 }
