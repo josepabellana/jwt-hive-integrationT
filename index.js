@@ -15,9 +15,12 @@ const jwtInstance = new Jwt(process.env.PARTNER_ID, process.env.PARTNER_TOKEN, p
 
 
 app.get('/jwtHive', async function(req,res){
+
+    console.log(jwtInstance)
     try{
+        await jwtInstance.init();
         let newJwt = await computePublicKey(jwtInstance)
-        res.send({newJwt});
+        res.status(200).send({newJwt});
     }catch(err){
         res.send(`Internal Server Error: ${err}`)
     }

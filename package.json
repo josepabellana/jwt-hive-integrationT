@@ -2,7 +2,7 @@
   "name": "repos",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
     "commit": "git add . && git commit -m 'x' && git push"

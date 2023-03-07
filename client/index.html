@@ -11,10 +11,9 @@
       }
     </style>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <title>Integration Test</title>
 
     <link href="http://vjs.zencdn.net/4.5/video-js.css" rel="stylesheet" />
-
   </head>
   <body>
     <h1>Josep's TownHall</h1>
@@ -22,21 +21,29 @@
       <video id="my-player" class="video-js" controls></video>
     </div>
     <script src="http://vjs.zencdn.net/4.5/video.js"></script>
-    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script>
-    <script src="https://download.hivestreaming.com/media-player/common_libs/html5/js/videojs/hive-videojs-xhr-interceptor.js"></script>
+    <script src="./hive-videojs-xhr-interceptor.js"></script>
+    <script src="./html5.java.hivejs.hive.test.js"></script>
     <script>
+      var newJwt = "";
       let videoId = "video-id";
-      let manifest = "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8";
+      let manifest =
+        "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8";
 
-
-      let {newJwt} = fetch('http://localhost:3000/jwtHive').then(response => response.json()).then(data=>console.log(data)).catch(err => console.log(`There's an error with the fetch: ${err}`));;
+      fetch("http://localhost:3000/jwtHive")
+        .then((response) => console.log(response))
+        .then((jwt) => {
+          newJwt = jwt;
+          console.log(jwt);
+        })
+        .catch((err) => console.log(`There's an error with the fetch: ${err}`));
+        
       let hivePluginOptions = {
         debugLevel: "debug",
         hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
         playerName: "video.js",
-        playerVersion: videojs.VERSION
+        playerVersion: videojs.VERSION,
       };
-
+      
       // Create player instance. E.g. for video.js:
       let videojsOptions = {
         autoplay: true,
@@ -48,8 +55,10 @@
         },
       };
 
-      let videoEl = document.getElementById('my-player');
-      let player = videojs(videoEl, videojsOptions, () =>console.log("player is ready"));
+      let videoEl = document.getElementById("my-player");
+      let player = videojs(videoEl, videojsOptions, () =>
+        console.log("player is ready")
+      );
       let plugin = new HiveHtml5(videoEl, hivePluginOptions);
 
       // Initialize the session
@@ -70,7 +79,7 @@
           ]);
           console.log("plugin working!");
         })
-        .catch(error => console.log("Error resolving Hive ticket", error));
+        .catch((error) => console.log("Error resolving Hive ticket", error));
     </script>
   </body>
 </html>

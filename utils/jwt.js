@@ -14,18 +14,19 @@ module.exports = class Jwt {
     this.keyId = "key-" + Math.floor(Math.random() * 1000);
     this.customerId = process.env.CUSTOMER_ID;
     this.videoID = "video-id";
-    this.manifests = JSON.parse(process.env.MANIFESTS);
-    this.expiresIn = "15 minutes";
+    this.manifests = process.env.MANIFESTS;
+    this.expiresIn = "2m";
     this.eventName = "event test name";
 
-    this.createPrivateKey();
     this.client = new HivePublicKeyServiceClient(
         this.partnerId,
         this.partnerToken,
         this.endpoint
       );
   }
-
+  async init(){
+        await this.createPrivateKey();
+  }
   async createPrivateKey() {
     const keyPair = await HiveKeyPair.create();
     await keyPair.writePrivateKey(this.file);
@@ -36,7 +37,6 @@ module.exports = class Jwt {
         //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
         try{
             let a = await this.client.get(this.keyId);
-            
             if(Date.now() < a.expiration){
                 return true;
             }
@@ -61,15 +61,14 @@ module.exports = class Jwt {
 
   async createJWT() {
     //CREATE JWT
-    const jwtCreator = await HiveJwtCreator.create(this.partnerId, this.file);
-    const jwt = jwtCreator.sign(
-      this.keyId,
-      this.customerId,
-      this.videoId,
-      this.manifests,
-      this.expiresIn,
-      this.eventName
-    );
+    const jwt = HiveJwtCreator.create(this.partnerId, this.file).then(prom => prom.sign(
+        this.keyId,
+        this.customerId,
+        this.videoId,
+        this.manifests,
+        this.expiresIn,
+        this.eventName
+    ));
     return jwt;
   }
 }
