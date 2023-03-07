@@ -13,12 +13,8 @@
     <meta charset="UTF-8" />
     <title>Title</title>
 
-    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js" />
-    <script src="https://download.hivestreaming.com/media-player/common_libs/html5/js/videojs/hive-videojs-xhr-interceptor.js" />
-
     <link href="http://vjs.zencdn.net/4.5/video-js.css" rel="stylesheet" />
 
-    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script>
   </head>
   <body>
     <h1>Josep's TownHall</h1>
@@ -26,13 +22,14 @@
       <video id="my-player" class="video-js" controls></video>
     </div>
     <script src="http://vjs.zencdn.net/4.5/video.js"></script>
+    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script>
+    <script src="https://download.hivestreaming.com/media-player/common_libs/html5/js/videojs/hive-videojs-xhr-interceptor.js"></script>
     <script>
       let videoId = "video-id";
       let manifest = "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8";
 
 
-      let {newJwt} = fetch('http://localhost:3000/jwtHive').then(response => console.log(response)).catch(err => console.log(`There's an error with the fetch: ${err}`));;
-
+      let {newJwt} = fetch('http://localhost:3000/jwtHive').then(response => response.json()).then(data=>console.log(data)).catch(err => console.log(`There's an error with the fetch: ${err}`));;
       let hivePluginOptions = {
         debugLevel: "debug",
         hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
@@ -59,8 +56,8 @@
       plugin
         .initSession({
           jwt: newJwt,
-          videoId: videoId,
-          manifest: manifest,
+          videoId,
+          manifest,
         })
         .then((session) => {
           // Enable hive interceptor. E.g. for video.js:
