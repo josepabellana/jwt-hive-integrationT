@@ -1,10 +1,11 @@
 const Express = require('express');
 const app = Express();
+var cors = require('cors');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 dotenv.config();
 
-
+app.use(cors())
 app.use(bodyParser.json());
 
 const {computePublicKey} = require('./utils/jwtLogic.js');
@@ -13,14 +14,13 @@ const Jwt = require('./utils/jwt');
 const jwtInstance = new Jwt(process.env.PARTNER_ID, process.env.PARTNER_TOKEN, process.env.ENVIRONMENT);
 
 
-app.post('/jwtHive', async function(req,res){
-    let {videoId, manifest} = req.body;
+app.get('/jwtHive', async function(req,res){
     try{
-        res.status(200).send(await computePublicKey(jwtInstance));
+        let newJwt = await computePublicKey(jwtInstance)
+        res.send({newJwt});
     }catch(err){
-        res.status(500).send(`Internal Server Error: ${err}`)
+        res.send(`Internal Server Error: ${err}`)
     }
-    res.end();
 });
 
 app.listen(3000,function (){
