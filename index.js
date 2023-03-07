@@ -1,15 +1,22 @@
 const Express = require('express');
 const app = Express();
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 dotenv.config();
+
+
+app.use(bodyParser.json());
 
 const {computePublicKey} = require('./utils/jwtLogic.js');
 const Jwt = require('./utils/jwt');
 
 const jwtInstance = new Jwt(process.env.PARTNER_ID, process.env.PARTNER_TOKEN, process.env.ENVIRONMENT);
 
-app.get('/jwtHive', async function(req,res){
 
+app.post('/jwtHive', async function(req,res){
+    console.log('req:',req.body)
+    let {videoId, manifest} = req.body;
+    console.log(videoId,manifest)
     try{
         res.status(200).send(await computePublicKey(jwtInstance));
     }catch(err){
@@ -17,9 +24,9 @@ app.get('/jwtHive', async function(req,res){
     }
 });
 
-app.listen(3001,function (){
+app.listen(3000,function (){
     try{
-        console.log(`connected to port ${3001}`);
+        console.log(`connected to port ${3000}`);
     }catch(err){
         console.log(err);
     }

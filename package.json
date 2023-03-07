@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "commit": "git add . && git commit -m 'x' && git push"
   },
   "repository": {
     "type": "git",

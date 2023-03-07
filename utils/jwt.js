@@ -19,6 +19,11 @@ module.exports = class Jwt {
     this.eventName = "event test name";
 
     this.createPrivateKey();
+    this.client = new HivePublicKeyServiceClient(
+        this.partnerId,
+        this.partnerToken,
+        this.endpoint
+      );
   }
 
   async createPrivateKey() {
@@ -27,40 +32,43 @@ module.exports = class Jwt {
   }
 
   async publishPublicKey() {
-    const client = new HivePublicKeyServiceClient(
-        this.partnerId,
-        this.partnerToken,
-        this.endpoint
-      );
-    let a = await client.get(this.keyId);
-    if(a !== undefined && Date.now() < a.expiration){
-        return true
-    }
-    
-    this.keyId = "key-" + Math.floor(Math.random() * 1000);
-    const keyPair = await HiveKeyPair.readFromFile(this.file);
-    const publicKey = keyPair.exportPublicKey();
+    try{
+        //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
+        try{
+            let a = await this.client.get(this.keyId);
+            console.log(a);
+            if(Date.now() < a.expiration){
+                return true;
+            }
+        }catch(err){
+            this.keyId = "key-" + Math.floor(Math.random() * 1000);
+            console.log(this.keyId)
+            const keyPair = await HiveKeyPair.readFromFile(this.file);
+            const publicKey = keyPair.exportPublicKey();
 
-    await client.create({
-      partnerId: this.partnerId,
-      expiration: this.expiration,
-      keyId: this.keyId,
-      ...publicKey,
-    });
-    return true;
+            await this.client.create({
+            partnerId: this.partnerId,
+            expiration: Date.now() + this.expiration,
+            keyId: this.keyId,
+            ...publicKey,
+            });
+            return true;
+        }
+    }catch(err){
+        console.log(err);
+    }
   }
 
   async createJWT() {
     //CREATE JWT
-
-    const jwtCreator = await HiveJwtCreator.create(partnerId, this.file);
+    const jwtCreator = await HiveJwtCreator.create(this.partnerId, this.file);
     const jwt = jwtCreator.sign(
-      keyId,
-      customerId,
-      videoId,
-      manifests,
-      expiresIn,
-      eventName
+      this.keyId,
+      this.customerId,
+      this.videoId,
+      this.manifests,
+      this.expiresIn,
+      this.eventName
     );
     return jwt;
   }
