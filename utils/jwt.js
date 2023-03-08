@@ -25,6 +25,7 @@ module.exports = class Jwt {
         this.endpoint
       );
   }
+  
   async init(){
         await this.createPrivateKey();
   }
