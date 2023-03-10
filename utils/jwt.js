@@ -41,6 +41,7 @@ module.exports = class Jwt {
     try{
         //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
         try{
+          //This news to be improved
             let a = await this.client.get(this.keyId);
             if(Date.now() < a.expiration){
                 return true;
