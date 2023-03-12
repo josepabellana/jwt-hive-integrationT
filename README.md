@@ -13,3 +13,5 @@ To run the server:
 '''
 npm start
 '''
+
+Now you just need to open the html file with a live server
