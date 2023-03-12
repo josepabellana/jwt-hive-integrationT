@@ -18,7 +18,7 @@ module.exports = class Jwt {
     this.expiresIn = 1000 * 60 * 30;  // 30 m
     this.currentJWT = '';
     this.expirationJWT = 0;
-    this.eventName = "event test name";
+    this.eventName = "event test name"; //Specific Event name that will appear inside each videoId name
     this.client = new HivePublicKeyServiceClient(
         this.partnerId,
         this.partnerToken,
