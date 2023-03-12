@@ -20,6 +20,7 @@
   "dependencies": {
     "@hivestreaming/hive-jwt-auth": "^1.1.0",
     "@videojs/http-streaming": "^2.16.2",
+    "axios": "^1.3.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
