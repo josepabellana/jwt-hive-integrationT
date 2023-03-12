@@ -1,5 +1,3 @@
-
-
 const axios = require('axios');
 
 let baseURL = `https://api-test.hivestreaming.com/v1`
