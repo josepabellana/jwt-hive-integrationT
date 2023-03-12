@@ -8,7 +8,7 @@ module.exports = class Jwt {
   constructor(partnerId = "9001", partnerToken = "foobar", endpoint = "prod") {
     this.partnerId = partnerId;
     this.partnerToken = partnerToken;
-    this.endpoint = endpoint;
+    this.endpoint = endpoint; // test or Prod(it exists dev in some parts of the docu but not available)
     this.expiration = 1000 * 60 * 60 * 2; //2 hours
     this.file = process.env.FILE_PATH;
     this.keyId = "key-" + Math.floor(Math.random() * 1000);
