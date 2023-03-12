@@ -1,6 +1,6 @@
 
 
-const axios = request('axios');
+const axios = require('axios');
 
 let baseURL = `https://api-test.hivestreaming.com/v1`
 
@@ -16,5 +16,6 @@ let client = axios.create({
 
 
 
-let data = client.get(`/publickey/9001?includeDeleted=false`).then(data => data.json());
+let data = client.get(`/publickey/9001?includeDeleted=false`).then(data => console.log(data)); //list all keys
     
+let data2 = client.get(`/publickey/9001/kez-999`);
