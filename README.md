@@ -4,7 +4,7 @@ This test is used to provide a succinct example of the integration to the Hive p
 
 
 
-First, install dependencies and ask for the necessary env variables
+First, install dependencies and ask for the necessary env variables(for testing reasons, the only variable that does not have a fallback value is the partnerToken)
 '''
 npm install
 '''
