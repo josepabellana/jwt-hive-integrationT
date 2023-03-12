@@ -48,7 +48,6 @@ module.exports = class Jwt {
             }
         }catch(err){
             this.keyId = "key-" + Math.floor(Math.random() * 1000);
-            
             const keyPair = await HiveKeyPair.readFromFile(this.file);
             const publicKey = keyPair.exportPublicKey();
 
