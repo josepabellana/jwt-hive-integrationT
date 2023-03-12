@@ -13,9 +13,6 @@ let client = axios.create({
 });
 
 
-
-
-
 // let data = client.get(`/publickey/9001?includeDeleted=false`).then(data => console.log(data)); //list all keys
     
 let data2 = client.get(`/publickey/9001/key-616`).then(data2=>console.log(data2)).catch(err=>console.log('error'));
