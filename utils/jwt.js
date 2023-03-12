@@ -5,7 +5,7 @@ const {
 } = require("@hivestreaming/hive-jwt-auth");
 
 module.exports = class Jwt {
-  constructor(partnerId = "9001", partnerToken = "foobar", endpoint = "prod") {
+  constructor(partnerId = "9001", partnerToken = "foobar", endpoint = "test") {
     this.partnerId = partnerId; // Also call testId or PlayerId. Specifies the player being used
     this.partnerToken = partnerToken; //specific partner token, each customer has one
     this.endpoint = endpoint; // test or Prod(it exists dev in some parts of the docu but not available)
