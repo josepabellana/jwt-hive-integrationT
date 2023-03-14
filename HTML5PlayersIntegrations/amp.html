@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <title>HTML5</title>
+  </head>
+  <body>
+    <h1>HTML5 Plugin</h1>
+    <div>
+        <video id="my-player" class="azuremediaplayer amp-default-skin"></video>
+        <p class="amp-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video
+        </p>
+    </video>
+    </div>
+    
+    <script src="https://download.hivestreaming.com/media-player/plugins/amp/9.0.0/amp.java.hivejs.hive.min.js"></script>
+    <script src="https://download.hivestreaming.com/media-player/plugins/html5/8.0.0/html5.java.hivejs.hive.min.js"></script> 
+    <script src= "//amp.azure.net/libs/amp/latest/azuremediaplayer.min.js"></script>
+    <script>
+      let videoId = "test-video";
+      let manifest = "https://streaming-simulator-prod.hivestreaming.com/generic/live/beta-big-bunny-multi/manifest.m3u8";
+
+      let hivePluginOptions = {
+        debugLevel: "debug",
+        hiveTechOrder: ["HiveJava", "HiveJS", "StatsJS"],
+        playerName: "amp",
+        playerVersion: amp.VERSION,
+      };
+    
+      var player = amp('video', {
+        controls: true,
+        width: "640",
+        height: "400",
+        plugins: {
+            hive: hivePluginOptions
+        }
+    });
+      let videoEl = document.getElementById("my-player");
+      let plugin = new HiveHtml5(videoEl, hivePluginOptions);
+
+      let jwt = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InRlc3RuYW1lLTMyOTgzIn0.eyJpc3MiOiI5MDAxIiwic3ViIjoidGVzdC12aWRlbyIsInZlciI6IjEuMCIsImF1ZCI6Imh0dHBzOi8vaGl2ZXN0cmVhbWluZy5jb20iLCJjaWQiOiIxNSIsImV2biI6InRlc3QtZXZlbnQiLCJtYW4iOlsiaHR0cHM6Ly9zdHJlYW1pbmctc2ltdWxhdG9yLXByb2QuaGl2ZXN0cmVhbWluZy5jb20vZ2VuZXJpYy9saXZlL2JldGEtYmlnLWJ1bm55LW11bHRpL21hbmlmZXN0Lm0zdTgiXSwiaWF0IjoxNjc4NzkxMDM2LCJleHAiOjE2ODEzODMwMzZ9.FcDGCXEu5c-cP0nMMfBSkpgDnaPQ08AG4nwW5Wqtgjp_THrGiN7BoHDz69VFbl4MiF361v5kuQu2m8tDrDTQEPC44ux0lvERrdbVQ2Y0M7sczOp1kGjymYLKeY4awsIA9LmafsNvVg_sRTpSI7UliUZz4c8DuPi7Rg3xYozOtvThNWCu-CTv52Wh2kez8jQXMZIF9t6IoaCqc3SvbiSArqONuAU4er9U80MGVa57znxxQXJvRCoCUlsj-IzMuS_bhQxcjFXNNZWWkP-l6LAQ4Y-RJCnPggGDJsh2WoDp9P5nLjzzCiTt4rvRNmtaOtTBGmD06FlKcRiW-Rib4b1fciyQJZ70rT5VFJPqW_jKmNXnCYrXB1674cHRqehlbItOH48iw6h_0F7jcwUIX6YQLz1YHM7BoO_C8Tolwkp0tBVUwQhcjnbG6D1YnzbYkAG983UJpFhN1RvHejKwvM72AexzN4I0EWj4aj-DkPe_OovSEIQxq0ji9qTrs86ybg6FRjkapKfh0on4R_r7KtRWbL2-VexyNmSUexTh63BJks4b9b92Ss7TBmZ2J2LhteH_atKlBmEPb-M2JexPvNRxlsVEm_eBXhlJWCrxbrgHwDZ_fxuQs9fmKUwVrk-HH_mlkqPd9BPDGpI2-I22J5HrKxZD6ISeSLQYDjA4bERF4I4";
+      console.log(jwt);
+      plugin
+        .initSession({
+          jwt: jwt,
+          videoId,
+          manifest,
+        })
+        .then((session) => {
+          // Enable hive interceptor.
+          enableHiveXhr(plugin, amp);
+          player.src([
+            {
+              src: session.manifest,
+              type: "application/x-mpegURL",
+            },
+          ]);
+          console.log("plugin working!");
+        })
+        .catch((error) => console.log("Error resolving Hive ticket", error));
+    </script>
+  </body>
+</html>
