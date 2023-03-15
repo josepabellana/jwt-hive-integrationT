@@ -40,14 +40,13 @@ module.exports = class Jwt {
   async publishPublicKey() {
     try{
         //Three possibilities: 1- Key exists and its uptoDate 2- Key exists and not up to date 3-Key does not exist
-        try{
+        
           //This news to be improved
-            let a = await this.client.get(this.keyId);
-            if(Date.now() < a.expiration){
-                return true;
-            }
-        }catch(err){
-            this.keyId = "key-" + Math.floor(Math.random() * 1000);
+            let a = this.client.get(this.keyId).then(a=>{
+                if(Date.now() < a.expiration) return true;
+                else return false;
+            }).catch((err)=>{
+              this.keyId = "key-" + Math.floor(Math.random() * 1000);
             const keyPair = await HiveKeyPair.readFromFile(this.file);
             const publicKey = keyPair.exportPublicKey();
 
@@ -58,7 +57,8 @@ module.exports = class Jwt {
             ...publicKey,
             });
             return true;
-        }
+            })
+
     }catch(err){
         console.log(err);
     }
