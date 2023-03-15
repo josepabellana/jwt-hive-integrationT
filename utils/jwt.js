@@ -45,19 +45,19 @@ module.exports = class Jwt {
             let a = this.client.get(this.keyId).then(a=>{
                 if(Date.now() < a.expiration) return true;
                 else return false;
-            }).catch((err)=>{
+            }).catch(async (err)=>{
               this.keyId = "key-" + Math.floor(Math.random() * 1000);
-            const keyPair = await HiveKeyPair.readFromFile(this.file);
-            const publicKey = keyPair.exportPublicKey();
+              const keyPair = await HiveKeyPair.readFromFile(this.file);
+              const publicKey = keyPair.exportPublicKey();
 
-            await this.client.create({
-            partnerId: this.partnerId,
-            expiration: Date.now() + this.expiration,
-            keyId: this.keyId,
-            ...publicKey,
-            });
-            return true;
-            })
+              await this.client.create({
+              partnerId: this.partnerId,
+              expiration: Date.now() + this.expiration,
+              keyId: this.keyId,
+              ...publicKey,
+              });
+              return true;
+              })
 
     }catch(err){
         console.log(err);
