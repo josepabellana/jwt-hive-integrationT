@@ -18,13 +18,13 @@ app.post('/jwtHive', async function(req,res){
     try{
         if(jwtInstance.checkJwtUTD()){
             let jwt = await jwtInstance.getJwt();
-            console.log('Jwt reused:', jwt.slice(-20));
+            console.log('Jwt reused:', {jwt});
             res.status(200).send({jwt});
         }else{
-            jwtInstance.updateInfo(manifest,videoId);
+            jwtInstance.updateInfo(manifest, videoId);
             await jwtInstance.publishPublicKey();
             let jwt =  await jwtInstance.createJWT();
-            console.log('New jwt created:', jwt.slice(-20));
+            console.log('New jwt created:', {jwt});
             res.status(200).send({jwt});
         }
     }catch(err){
